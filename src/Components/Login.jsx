@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { GlobleContext } from "../App";
-import { setAlert, setAuth } from "./ContextAPI/Action";
+import { setAlert, setAuth, setData } from "./ContextAPI/Action";
 import { auth_in } from "../Services/Service";
 import { useNavigate } from "react-router-dom";
 
@@ -40,7 +40,8 @@ async function handleSubmit (e){
     console.log(user)
     if(user.data.success){
         dispatch(setAlert({open:true,variant:'success',message:"Login Successful !!"}))
-        dispatch(setAuth(user.data.user))
+        dispatch(setAuth())
+        dispatch(setData(user.data.login))
         navigate('/dashboard')
         setLogin(false)
       }else{

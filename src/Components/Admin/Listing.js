@@ -11,14 +11,16 @@ function Listing() {
 
 const navigate = useNavigate();
 
-const {dispatch} = useContext(GlobleContext)
+const {dispatch,state} = useContext(GlobleContext)
+console.log(state.data[0].location)
+
 
 const [data,setData] = useState([])
 console.log(data)
 
-async function fetchData (){
+async function fetchData (location){
     try {
-        const response = await get_all_service()
+        const response = await get_all_service(location)
         console.log(response)
         if(response.data.success){
           setData(response.data.services)
@@ -32,7 +34,7 @@ async function fetchData (){
 }
 
 useEffect(()=>{
-    fetchData()
+    fetchData(state.data[0].location)
 },[])
 
 const detailsButton = (e) => {
@@ -135,7 +137,6 @@ const rows = data.map((row)=>{
         status:row.status
     }
 })
-
 
   return (
 

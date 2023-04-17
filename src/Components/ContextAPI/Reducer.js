@@ -4,6 +4,8 @@ export function reducer (state,action){
 
         case "ALERT" : return {...state, alert:action.payload}
 
+        case "SET_LOGIN" : return {...state,data:action.payload}
+
         default :return state
     }
 }

@@ -13,7 +13,7 @@ export function setAlert (data){
 
 export function setData (data){
         return{
-            type:"DATA",
+            type:"SET_LOGIN",
             payload:data
         }
 }

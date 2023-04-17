@@ -25,11 +25,13 @@ function App() {
     data:[]
   }
 
+  
 
   const [loginPopUp,setLogin] = useState(false);
   const [signUpPopUp, setSignUp] = useState(false);
 
   const [state,dispatch]  = useReducer(reducer,initialState)
+  console.log(state)
 
 
   return (
