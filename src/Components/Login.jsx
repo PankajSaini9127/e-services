@@ -9,6 +9,8 @@ import {
 import React, { useContext, useState } from "react";
 import { GlobleContext } from "../App";
 import { setAlert, setAuth } from "./ContextAPI/Action";
+import { auth_in } from "../Services/Service";
+import { useNavigate } from "react-router-dom";
 
 function Login({open,setLogin,setSignUp}) {
 
@@ -20,10 +22,6 @@ function Login({open,setLogin,setSignUp}) {
 
   const {dispatch} = useContext(GlobleContext)
 
-const login = {
-  email:"pankajsolanki6008@gmail.com",
-  password:"Pankaj"
-}
 
 function handleChange (e){
   setFormData({
@@ -32,15 +30,27 @@ function handleChange (e){
   })
 }
 
-function handleSubmit (e){
+const navigate = useNavigate();
+
+
+async function handleSubmit (e){
    e.preventDefault();
-    if(formData.email === login.email && formData.password === login.password){
-      dispatch(setAlert({open:true,variant:'success',message:"Login Successful !!"}))
-      dispatch(setAuth())
-      setLogin(false)
-    }else{
-      dispatch(setAlert({open:true,variant:'error',message:"Invalid Creds !!"}))
-    }
+   try {
+    const user = await auth_in(formData)
+    console.log(user)
+    if(user.data.success){
+        dispatch(setAlert({open:true,variant:'success',message:"Login Successful !!"}))
+        dispatch(setAuth(user.data.user))
+        navigate('/dashboard')
+        setLogin(false)
+      }else{
+        dispatch(setAlert({open:true,variant:'error',message:"Invalid Creds !!"}))
+      }
+
+   } catch (error) {
+    console.log(error)
+    dispatch(setAlert({open:true,variant:'error',message:"Something Went Wrong Pleaase Try Again Later"}))
+   }
 }
 
   return (

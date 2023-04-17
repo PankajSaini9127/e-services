@@ -3,6 +3,8 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { GlobleContext } from '../App';
 import { setAlert } from './ContextAPI/Action';
+import { sing_up } from '../Services/Service';
+import { TrainRounded } from '@mui/icons-material';
 
 function SignUp({open,setSignUp,setLogin}) {
 
@@ -21,12 +23,24 @@ function SignUp({open,setSignUp,setLogin}) {
       })
     }
 
-    function handleSubmit(e){
+  async function handleSubmit(e){
       e.preventDefault()
-
-      dispatch(setAlert({open:true,message:"User Sign Up Success Full",variant:"success"}))
+   try {
+    const result = await sing_up(formData)
+    console.log(result.data.success)
+    if(result.data.success){
+      dispatch(setAlert({open:true,message:"User Sign Up Successfully.",variant:"success"}))
+      setFormData({name:"",email:"",password:"",mobile:""})
       setSignUp(false)
-       console.log(formData)
+      setLogin(true)
+    }else{
+      dispatch(setAlert({open:true,message:"Something Went Wrong Please.",variant:"error"}))
+    }
+   } catch (error) {
+    console.log(error)
+    dispatch(setAlert({open:true,message:"Something Went Wrong Please.",variant:"error"}))
+   }
+      
 
     }
 

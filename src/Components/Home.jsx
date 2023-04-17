@@ -1,15 +1,11 @@
 
 import { Button, Grid,Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import React, { useState } from 'react'
-import Navbar from './Navbar'
-import Login from './Login'
-import SignUp from './SignUp'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 function Home() {
-  const [loginPopUp,setLogin] = useState(false);
-  const [signUpPopUp, setSignUp] = useState(false);
+ 
 
   const navigate = useNavigate()
 
@@ -19,9 +15,7 @@ function Home() {
 
   return (
     <>
-     <Navbar setLogin={setLogin} setSignUp={setSignUp}/>
-     <Login  open={loginPopUp} setLogin={setLogin} setSignUp={setSignUp} />
-     <SignUp open={signUpPopUp} setSignUp={setSignUp} setLogin={setLogin} />
+     
      <Box sx={{height:"100vh",backgroundColor:'#c2c8d1'}}>
        <Grid container sx={{justifyContent:"center", alignItems:'center',height:'100%'}}>
         <Grid item md={10} container sx={{justifyContent:'center'}} spacing={4}>

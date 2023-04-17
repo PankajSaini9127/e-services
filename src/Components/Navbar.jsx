@@ -17,7 +17,7 @@ const navigate = useNavigate()
   return (
     <>
     <Box sx={{flexGrow:1}}>
-        <AppBar position='fixed' >
+        <AppBar position='sticky' top="0" >
            <Toolbar>
           <Button color="inherit"  sx={{fontSize:'30px',fontFamily:"'Dancing Script', cursive",color:"#FFFFF"}} >
                       E-Services
@@ -26,16 +26,20 @@ const navigate = useNavigate()
         <Button color="inherit" sx={{color:"#FFFFF"}} onClick={()=>navigate('/')}>
           Home
           </Button>
-        <Button color="inherit" sx={{color:"#FFFFF"}} onClick={()=>navigate('/request')} >
+          {isAuth?<Button color="inherit" sx={{color:"#FFFFF"}} onClick={()=>navigate('/listing')}>
+       Request
+          </Button>:<Button color="inherit" sx={{color:"#FFFFF"}} onClick={()=>navigate('/request')} >
          Request For A Service
-          </Button>
+          </Button>}
         <Button color="inherit" sx={{color:"#FFFFF"}} onClick={()=>navigate('/service')} >
          Our Service
           </Button>
         <Button color="inherit" sx={{color:"#FFFFF"}} onClick={()=>navigate('/contact')}>
         Contact Us
           </Button>
+
           </Box>
+
         {
           isAuth?<Button color="inherit" onClick={handleLogout}>Logout</Button>:
            <>

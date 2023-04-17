@@ -14,9 +14,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { setAlert, setData } from "./ContextAPI/Action";
 import { GlobleContext } from "../App";
+import { register } from "../Services/Service";
 
 const TextFieldWrapper = ({ label, placeholder,onChange,name,value}) => {
   return (
@@ -81,9 +82,7 @@ const location =[
 
 function Request() {
   const [formData, setFormData] = useState({
-    fname: "",
-    mname: "",
-    lname: "",
+    name:"",
     fatherName: "",
     motherName: "",
     gender: "",
@@ -91,8 +90,26 @@ function Request() {
     address:"",
     email:"",
     location:"",
-    service:""
+    service:"",
+    status:"Pending"
   });
+
+  const [application, setApplication] = useState("")
+
+  const applicationNumberGenerator = () => {
+    var length = 12,
+      charset =
+        "0123456789",
+      random = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+      random += charset.charAt(Math.floor(Math.random() * n));
+      setApplication(random)
+    }
+  };
+
+ useEffect(()=>{
+    applicationNumberGenerator()
+ },[]) 
 
   const {dispatch} = useContext(GlobleContext)
 
@@ -103,10 +120,35 @@ function Request() {
         })
   }
 
-  function handleSubmit (e){
+
+
+async function handleSubmit (e){
     e.preventDefault()
-    dispatch(setData(formData))
-    dispatch(setAlert({open:true,variant:"success",message:"User Register Successfully."}))
+  try {
+    const response = await register({...formData,application})
+    console.log(response.data.success)
+    if(response.data.success){
+      dispatch(setAlert({open:true,variant:"success",message:"User Register Successfully."}))
+      setFormData({
+        name:"",
+        fatherName: "",
+        motherName: "",
+        gender: "",
+        mobile: "",
+        address:"",
+        email:"",
+        location:"",
+        service:"",
+        status:"Pending"
+      })
+    }else{
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+    }
+  } catch (error) {
+    console.log(error)
+    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+  }
+   
   }
 
   return (
@@ -139,23 +181,9 @@ function Request() {
                 <TextFieldWrapper
                   label="First Name"
                   placeholder={"Enter Your First Name"}
-                  value={formData.fname}
+                  value={formData.name}
                   onChange={handleChange}
-                  name="fname"
-                />
-                <TextFieldWrapper
-                  label="Middle Name"
-                  placeholder={"Enter Your Middle Name"}
-                  value={formData.mname}
-                  onChange={handleChange}
-                  name="mname"
-                />
-                <TextFieldWrapper
-                  label="Last Name"
-                  placeholder={"Enter Your Last Name"}
-                  value={formData.lname}
-                  onChange={handleChange}
-                  name="lname"
+                  name="name"
                 />
                 <TextFieldWrapper
                   label="Father Name"
