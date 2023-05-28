@@ -41,8 +41,8 @@ async function handleSubmit (e){
     if(user.data.success){
         dispatch(setAlert({open:true,variant:'success',message:"Login Successful !!"}))
         dispatch(setAuth())
-        dispatch(setData(user.data.login))
-        navigate('/dashboard')
+        dispatch(setData(user.data.login[0]))
+        navigate(user.data.login[0].role === "Admin"?'/listing':'/user-listing')
         setLogin(false)
       }else{
         dispatch(setAlert({open:true,variant:'error',message:"Invalid Creds !!"}))
@@ -105,10 +105,6 @@ async function handleSubmit (e){
             >
               Login
             </Button>
-            <Typography variant="body1">
-              Don't have an account{" "}
-              <Button onClick={() =>(setLogin(false), setSignUp(true))}>SignUp Now</Button>
-            </Typography>
           </Box>
         </Grid>
       </Grid>

@@ -6,6 +6,8 @@ export function reducer (state,action){
 
         case "SET_LOGIN" : return {...state,data:action.payload}
 
+        case "ADD_SERVICE" : return {...state,preview:action.payload}
+
         default :return state
     }
 }

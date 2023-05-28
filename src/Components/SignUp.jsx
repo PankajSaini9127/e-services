@@ -11,11 +11,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { GlobleContext } from "../App";
 import { setAlert } from "./ContextAPI/Action";
 import { sing_up } from "../Services/Service";
-import { TrainRounded } from "@mui/icons-material";
 
 function SignUp({ open, setSignUp, setLogin }) {
   const [formData, setFormData] = useState({
@@ -24,6 +22,7 @@ function SignUp({ open, setSignUp, setLogin }) {
     password: "",
     mobile: "",
     location: "",
+    role:"User"
   });
 
   const { dispatch } = useContext(GlobleContext);
@@ -52,9 +51,8 @@ function SignUp({ open, setSignUp, setLogin }) {
             variant: "success",
           })
         );
-        setFormData({ name: "", email: "", password: "", mobile: "" });
+        setFormData({ name: "", email: "", password: "", mobile: "", role:"User" });
         setSignUp(false);
-        setLogin(true);
       } else {
         dispatch(
           setAlert({
@@ -103,6 +101,14 @@ function SignUp({ open, setSignUp, setLogin }) {
             color={"primary"}
           >
             E-Services
+          </Typography>
+          <Typography
+            variant="body1"
+            textAlign="center"
+            fontSize="25px"
+            color={"primary"}
+          >
+            Agent Registration
           </Typography>
           <Box component={"form"} onSubmit={handleSubmit}>
             <TextField
@@ -158,14 +164,8 @@ function SignUp({ open, setSignUp, setLogin }) {
               type="submit"
             >
               {" "}
-              Sign-Up
+              Add 
             </Button>
-            <Typography variant="body1">
-              Already have an account{" "}
-              <Button onClick={() => (setLogin(true), setSignUp(false))}>
-                Login Now
-              </Button>
-            </Typography>
           </Box>
         </Grid>
       </Grid>

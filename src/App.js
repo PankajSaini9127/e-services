@@ -14,49 +14,91 @@ import Navbar from "./Components/Navbar";
 import DashBoard from "./Components/Admin/DashBoard";
 import Listing from "./Components/Admin/Listing";
 import ViewPage from "./Components/Admin/ViewPage";
+import UserDashBoard from "./Components/UserPanel/UserDashBoard";
+import UserListing from "./Components/UserPanel/UserListing";
+import Preview from "./Components/Preview";
 
-const GlobleContext = createContext()
+const GlobleContext = createContext();
 
 function App() {
-
   const initialState = {
-    isAuth : false,
-    alert : {open:false,messgae:"",variant:""},
-    data:[]
-  }
+    isAuth: false,
+    alert: { open: false, messgae: "", variant: "" },
+    data: {},
+    preview: {},
+  };
 
-  
+  const [loginPopUp, setLogin] = useState(false);
 
-  const [loginPopUp,setLogin] = useState(false);
-  const [signUpPopUp, setSignUp] = useState(false);
-
-  const [state,dispatch]  = useReducer(reducer,initialState)
-  console.log(state)
-
+  const [state, dispatch] = useReducer(reducer, initialState);
+  console.log(state.isAuth && state.data.role === "Admin" );
 
   return (
-    <GlobleContext.Provider value={{state,dispatch}}>
-    <CustomAlert/>
-    
-    <BrowserRouter>
-    <Navbar setLogin={setLogin} setSignUp={setSignUp}/>
-     <Login  open={loginPopUp} setLogin={setLogin} setSignUp={setSignUp} />
-     <SignUp open={signUpPopUp} setSignUp={setSignUp} setLogin={setLogin} />
-      <Routes>
-        <Route path={"/"} exact element={<Home />} />
-        <Route path="/request" exact element={<Request/>} />
-        <Route path="/service" exact element={<Services />} />
-        <Route path="/contact" exact element={<Contact />} />
-        <Route path="/dashboard" exact element={<DashBoard />} />   
-        <Route path="/listing" exact element={<Listing />} />
-        <Route path="/view-service/:id" exact element={<ViewPage />} />
+    <GlobleContext.Provider value={{ state, dispatch }}>
+      <CustomAlert />
 
-        
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Navbar setLogin={setLogin} />
+        <Login open={loginPopUp} setLogin={setLogin} />
+
+        <Routes>
+          <Route path={"/"} exact element={<Home />} />
+          <Route path="/request" exact element={<Request />} />
+          <Route path="/service" exact element={<Services />} />
+          <Route path="/contact" exact element={<Contact />} />
+          {/* <Route path="/dashboard" exact element={<DashBoard />} />    */}
+
+          <Route path="/preview-service" exact element={<Preview />} />
+
+          <Route
+            path="/listing"
+            exact
+            element={
+              state.isAuth && state.data.role === "Admin" ? (
+                <Listing />
+              ) : (
+                <Home />
+              )
+            }
+          />
+           <Route
+            path="/view-service/:id"
+            exact
+            element={
+                <ViewPage />
+            }
+          />
+          <Route
+            path="/user-dashboard"
+            exact
+            element={
+              state.isAuth && state.data.role === "User" ? (
+                <UserDashBoard />
+              ) : (
+                <Home />
+              )
+            }
+          />
+          <Route
+            path="/user-listing"
+            exact
+            element={
+              state.isAuth && state.data.role === "User" ? (
+                <UserListing />
+              ) : (
+                <Home />
+              )
+            }
+          />
+
+          {/* <Route path="/customber-listing" exact element={<CustomberServices />} /> */}
+
+          {/* "/user-dashboard" */}
+        </Routes>
+      </BrowserRouter>
     </GlobleContext.Provider>
   );
 }
 
-export {GlobleContext};
+export { GlobleContext };
 export default App;

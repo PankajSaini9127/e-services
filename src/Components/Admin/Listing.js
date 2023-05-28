@@ -1,43 +1,54 @@
-import { Box, Button, Grid, Typography } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid';
-import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { GlobleContext } from '../../App';
-import { setAlert } from '../ContextAPI/Action';
-import { get_all_service } from '../../Services/Service';
-
+import { Box, Button, Grid, Typography } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { GlobleContext } from "../../App";
+import { setAlert } from "../ContextAPI/Action";
+import { get_all_service, get_all_user } from "../../Services/Service";
+import SignUp from "../SignUp";
 
 function Listing() {
+  const navigate = useNavigate();
 
-const navigate = useNavigate();
+  const { dispatch, state } = useContext(GlobleContext);
 
-const {dispatch,state} = useContext(GlobleContext)
-console.log(state.data[0].location)
+  const [signUpPopUp, setSignUp] = useState(false);
 
+  const [data, setData] = useState([]);
+  console.log(data);
 
-const [data,setData] = useState([])
-console.log(data)
-
-async function fetchData (location){
+  async function fetchData() {
     try {
-        const response = await get_all_service(location)
-        console.log(response)
-        if(response.data.success){
-          setData(response.data.services)
-        }else{
-            dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))   
-        }
+      const response = await get_all_user();
+      console.log(response);
+      if (response.data.success) {
+        setData(response.data.users);
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
     } catch (error) {
-        console.log(error)
-        dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
     }
-}
+  }
 
-useEffect(()=>{
-    fetchData(state.data[0].location)
-},[])
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-const detailsButton = (e) => {
+  const detailsButton = (e) => {
     const id = e.id;
 
     return (
@@ -60,19 +71,18 @@ const detailsButton = (e) => {
         View
       </Button>
     );
-};
+  };
 
-const columns = [
+  const columns = [
     {
-        field: "application",
-        headerName: "Application Number",
-        minWidth: 90,
-        flex: 1,
-        type: "number",
-        headerClassName: "dataGridHeader",
-        headerAlign: "center",
-      },
-   {
+      field: "sr",
+      headerName: "Sr",
+      minWidth: 10,
+      type: "number",
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
       field: "name",
       headerName: "Name",
       minWidth: 90,
@@ -98,129 +108,122 @@ const columns = [
       headerAlign: "center",
     },
     {
-      field: "service",
-      headerName: "Service",
+      field: "email",
+      headerName: "Email",
       minWidth: 160,
       flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
-    {
-      field: "status",
-      headerName: "Status",
-      minWidth: 200,
-      flex: 1,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-    },
-    {
-      field: "view",
-      headerName: "View",
-      minWidth: 150,
-      flex: 1,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      renderCell: detailsButton,
-    }
-];
+  ];
 
-
-
-const rows = data.map((row)=>{
-    return{
-        id:row.id,
-        application:"123456",
-        name:row.name,
-        mobile:row.mobile,
-        location:row.location,
-        service:row.service,
-        status:row.status
-    }
-})
+  const rows = data.map((row, i) => {
+    return {
+      id: row.id,
+      sr: i + 1,
+      name: row.name,
+      mobile: row.mobile,
+      location: row.location,
+      email: row.email,
+    };
+  });
 
   return (
+    <Grid container sx={{ justifyContent: "center", mt: 2 }}>
+      <SignUp open={signUpPopUp} setSignUp={setSignUp} />
 
-    <Grid container sx={{justifyContent:"center",mt:2}}>
-        <Typography variant='body1' fontSize="35px" fontWeight='600' textAlign={'center'}>
-                Request Received
-            </Typography>
-        <Grid item sm={10}>
+      <Grid item xs={12}>
+        <Typography
+          variant="body1"
+          fontSize="35px"
+          fontWeight="600"
+          textAlign={"center"}
+        >
+          E-Servises Provider
+        </Typography>
+        <Button
+          sx={{ float: "right", mr: 6, my: 3 }}
+          onClick={() => setSignUp(true)}
+          variant="contained"
+        >
+          Add Agent
+        </Button>
+      </Grid>
+
+      <Grid item sm={10}>
         <Box
-        sx={{
-          height: "430px",
-          px: 2,
-          "& .dataGridHeader": {
-            color: "#CACACA",
-            textAlign: "left",
-          },
-          "& .green": {
-            backgroundColor: "#E7FFE9",
-            color: "#41CF2A",
-          },
-          "& .yellow": {
-            backgroundColor: "#FEFFC8",
-            color: "#C5C05B",
-          },
-          "& .red": {
-            backgroundColor: "#FFEBE7",
-            color: "#CF482A",
-          },
-          "& .hold": {
-            backgroundColor: "#CCCCCC",
-            color: "#FFFFFF",
-          },
-          "& .statusCell": {
-            maxHeight: "30px !important",
-            minHeight: "25px !important",
-            textAlign: "center !important",
-            borderRadius: "10px !important",
-            m: "auto",
-            mx: 1,
-          },
-          "& .allCell": {
-            justifyContent: "center !important",
-          },
-        }}
-      >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={6}
-          rowsPerPageOptions={[6]}
-          // checkboxSelection
-          sx={{ color: "black !important", minWidth: "50px" }}
-          getCellClassName={(parms) => {
-            let cellClass = [];
-            if (
-              parms.field === "status" &&
-              (parms.row.status === "Approved" ||
-                parms.row.status === "Deposited")
-            ) {
-              cellClass.push("green statusCell");
-            } else if (
-              parms.field === "status" &&
-              (parms.row.status === "Pending")
-            ) {
-              cellClass.push("yellow statusCell");
-            } else if (
-              parms.field === "status" &&
-              (parms.row.status === "Sent Back From Sr Manager" ||
-                parms.row.status === "Sent Back From BUH" ||
-                parms.row.status === "Sent Back From Operations" ||
-                parms.row.status === "Sent Back From Finance")
-            ) {
-              cellClass.push("red statusCell");
-            }
-            cellClass.push("allCell");
-
-            return cellClass;
+          sx={{
+            height: "430px",
+            px: 2,
+            "& .dataGridHeader": {
+              color: "#CACACA",
+              textAlign: "left",
+            },
+            "& .green": {
+              backgroundColor: "#E7FFE9",
+              color: "#41CF2A",
+            },
+            "& .yellow": {
+              backgroundColor: "#FEFFC8",
+              color: "#C5C05B",
+            },
+            "& .red": {
+              backgroundColor: "#FFEBE7",
+              color: "#CF482A",
+            },
+            "& .hold": {
+              backgroundColor: "#CCCCCC",
+              color: "#FFFFFF",
+            },
+            "& .statusCell": {
+              maxHeight: "30px !important",
+              minHeight: "25px !important",
+              textAlign: "center !important",
+              borderRadius: "10px !important",
+              m: "auto",
+              mx: 1,
+            },
+            "& .allCell": {
+              justifyContent: "center !important",
+            },
           }}
-          // onSelectionModelChange={handleSelect}
-        ></DataGrid>
-      </Box>
-        </Grid>
+        >
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={6}
+            rowsPerPageOptions={[6]}
+            // checkboxSelection
+            sx={{ color: "black !important", minWidth: "50px" }}
+            getCellClassName={(parms) => {
+              let cellClass = [];
+              if (
+                parms.field === "status" &&
+                (parms.row.status === "Approved" ||
+                  parms.row.status === "Deposited")
+              ) {
+                cellClass.push("green statusCell");
+              } else if (
+                parms.field === "status" &&
+                parms.row.status === "Pending"
+              ) {
+                cellClass.push("yellow statusCell");
+              } else if (
+                parms.field === "status" &&
+                parms.row.status === "Rejected"
+              ) {
+                cellClass.push("red statusCell");
+              }
+              cellClass.push("allCell");
+
+              return cellClass;
+            }}
+            // onSelectionModelChange={handleSelect}
+          ></DataGrid>
+        </Box>
+      </Grid>
     </Grid>
-  )
+  );
 }
 
-export default Listing
+export default Listing;

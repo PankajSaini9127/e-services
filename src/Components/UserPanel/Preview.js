@@ -5,7 +5,7 @@ import { setAlert } from '../ContextAPI/Action';
 import { get_service_id, update_service } from '../../Services/Service';
 import { GlobleContext } from '../../App';
 
-function ViewPage() {
+function Preview() {
 
     const {id} = useParams()
     console.log(id)
@@ -65,10 +65,8 @@ useEffect(()=>{
                 <DataFieldStyle field={"Mother Name"} value={data[0].motherName}/>
                 <DataFieldStyle field={"Mobile Number"} value={data[0].mobile}/>
                 <DataFieldStyle field={"email"} value={data[0].email}/>
-                <DataFieldStyle field={"Time Slot"} value={data[0].timeslot}/>
                 <DataFieldStyle field={"location"} value={data[0].location}/>
                 <DataFieldStyle field={"Service"} value={data[0].service}/>
-                
             </Grid>
         </Grid>
 
@@ -81,7 +79,7 @@ useEffect(()=>{
   )
 }
 
-export default ViewPage
+export default Preview
 
 const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
     const [open, setOpen] = useState(false);

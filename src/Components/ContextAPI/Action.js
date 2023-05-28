@@ -17,3 +17,10 @@ export function setData (data){
             payload:data
         }
 }
+
+export function addService(data){
+    return{
+        type:"ADD_SERVICE",
+        payload:data
+    }
+}

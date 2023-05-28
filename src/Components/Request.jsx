@@ -15,11 +15,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-import { setAlert, setData } from "./ContextAPI/Action";
+import { addService, setAlert, setData } from "./ContextAPI/Action";
 import { GlobleContext } from "../App";
-import { register } from "../Services/Service";
+import { get_provider, register } from "../Services/Service";
+import { useNavigate } from "react-router-dom";
 
-const TextFieldWrapper = ({ label, placeholder,onChange,name,value}) => {
+const TextFieldWrapper = ({ label, placeholder,onChange,name,value,type}) => {
   return (
     <Grid item md={4}>
       <FormControl fullWidth>
@@ -28,10 +29,12 @@ const TextFieldWrapper = ({ label, placeholder,onChange,name,value}) => {
           type={"text"}
           variant="outlined"
           label={label}
+          type= {type?type:"text"}
           placeholder={placeholder}
           onChange={onChange}
           name={name}
           value={value}
+          required={true}
         />
       </FormControl>
     </Grid>
@@ -44,7 +47,7 @@ const SelectComponent = ({ label,onChange,name,value,options }) => {
       <Grid item sm={4}>
         <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-          <Select labelId="demo-simple-select-label" label={label} onChange={onChange} name={name} value={value}>
+          <Select labelId="demo-simple-select-label" required label={label} onChange={onChange} name={name} value={value}>
           <MenuItem>Select Service</MenuItem>
             {
               options.map((row,i)=>{
@@ -81,6 +84,10 @@ const location =[
 ]
 
 function Request() {
+  const {dispatch,state} = useContext(GlobleContext)
+
+  const [provider,setProvider] = useState([])
+
   const [formData, setFormData] = useState({
     name:"",
     fatherName: "",
@@ -91,10 +98,13 @@ function Request() {
     email:"",
     location:"",
     service:"",
-    status:"Pending"
+    status:"Pending",
+    user_id:state.data.id,
+    timeslot:"",
+    application:"",
+    provider:""
   });
 
-  const [application, setApplication] = useState("")
 
   const applicationNumberGenerator = () => {
     var length = 12,
@@ -103,7 +113,7 @@ function Request() {
       random = "";
     for (var i = 0, n = charset.length; i < length; ++i) {
       random += charset.charAt(Math.floor(Math.random() * n));
-      setApplication(random)
+      setFormData({...formData,application:random})
     }
   };
 
@@ -111,7 +121,7 @@ function Request() {
     applicationNumberGenerator()
  },[]) 
 
-  const {dispatch} = useContext(GlobleContext)
+
 
   function handleChange (e){
         setFormData({
@@ -120,27 +130,17 @@ function Request() {
         })
   }
 
-
+const navigate = useNavigate()
 
 async function handleSubmit (e){
     e.preventDefault()
   try {
-    const response = await register({...formData,application})
+    const response = await register(formData)
     console.log(response.data.success)
     if(response.data.success){
       dispatch(setAlert({open:true,variant:"success",message:"User Register Successfully."}))
-      setFormData({
-        name:"",
-        fatherName: "",
-        motherName: "",
-        gender: "",
-        mobile: "",
-        address:"",
-        email:"",
-        location:"",
-        service:"",
-        status:"Pending"
-      })
+      dispatch(addService(formData))
+      navigate('/preview-service')
     }else{
       dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
     }
@@ -150,6 +150,23 @@ async function handleSubmit (e){
   }
    
   }
+
+async function getProvider (location){
+  try {
+    const response = await get_provider(location)
+    console.log(response.data)
+    if(response.data.success){
+      setProvider(response.data.provider.map(row=>row.name))
+    }else{
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+    }
+  } catch (error) {
+    console.log(error)
+    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+  }
+}
+
+
 
   return (
     <>
@@ -184,6 +201,7 @@ async function handleSubmit (e){
                   value={formData.name}
                   onChange={handleChange}
                   name="name"
+                  
                 />
                 <TextFieldWrapper
                   label="Father Name"
@@ -201,7 +219,7 @@ async function handleSubmit (e){
                 />
 
                 <Grid item md={4}>
-                  <FormControl>
+                  <FormControl required>
                     <FormLabel id="demo-radio-buttons-group-label">
                       Gender
                     </FormLabel>
@@ -213,6 +231,7 @@ async function handleSubmit (e){
                       value={formData.gender}
                       onChange={handleChange}
                       name="gender"
+                      
                     >
                       <FormControlLabel
                         value="female"
@@ -234,6 +253,7 @@ async function handleSubmit (e){
                   value={formData.email}
                   onChange={handleChange}
                   name="email"
+                  type={'email'}
                 />
                 <TextFieldWrapper
                   label="Phone No"
@@ -249,12 +269,26 @@ async function handleSubmit (e){
                   onChange={handleChange}
                   name="address"
                 />
+                 <SelectComponent 
+                label={"Time Slot"}
+                value={formData.timeslot}
+                  onChange={handleChange}
+                  name="timeslot"
+                  options={["10AM - 12PM", "12PM - 2PM","2PM - 4PM","4PM - 6PM"]}
+                />
                 <SelectComponent 
                 label={"Select Nearby Location"} 
                 value={formData.location}
-                  onChange={handleChange}
+                  onChange={(e)=>{handleChange(e);getProvider(e.target.value)}}
                   name="location"
                   options={location}
+                />
+                 <SelectComponent 
+                label={"Select Service Provider"} 
+                value={formData.provider}
+                  onChange={handleChange}
+                  name="provider"
+                  options={provider}
                 />
                 <SelectComponent 
                 label={"Service Type"}

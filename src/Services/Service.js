@@ -18,13 +18,22 @@ export async function update_service (id,data){
     return await axios.put(`${API_LIVE}/service/update/${id}`,data)
 }
 
-export async function get_all_service (location){
-    return await axios.get(`${API_LIVE}/service/get-all-service/${location}`)
+export async function get_all_user (){
+    return await axios.get(`${API_LIVE}/service/get-all-service`)
 }
 
 export async function get_service_id (id){
     return await axios.get(`${API_LIVE}/service/get-service/${id}`)
 }
+
+export async function get_service_user (location){
+    return await axios.get(`${API_LIVE}/service/get_all_user_service/${location}`)
+}
+
+export async function get_provider (location){
+    return await axios.get(`${API_LIVE}/service/get-provide?location=${location}`)
+}
+
 
 
 

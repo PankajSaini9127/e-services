@@ -29,6 +29,7 @@ function Home() {
 
         </Grid>
         <Grid item md={4} xs={6}>
+          
           <Button variant="contained" onClick={handleRequest}>
             Request for free demo
           </Button>
