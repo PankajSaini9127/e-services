@@ -26,7 +26,7 @@ const TextFieldWrapper = ({ label, placeholder,onChange,name,value,type}) => {
       <FormControl fullWidth>
         <FormLabel>{label}</FormLabel>
         <TextField
-          type={"text"}
+          // type={"text"}
           variant="outlined"
           label={label}
           type= {type?type:"text"}

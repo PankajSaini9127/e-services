@@ -17,6 +17,7 @@ import ViewPage from "./Components/Admin/ViewPage";
 import UserDashBoard from "./Components/UserPanel/UserDashBoard";
 import UserListing from "./Components/UserPanel/UserListing";
 import Preview from "./Components/Preview";
+import ListContactQuery from "./Components/ListContactQuery.jsx";
 
 const GlobleContext = createContext();
 
@@ -49,6 +50,8 @@ function App() {
           {/* <Route path="/dashboard" exact element={<DashBoard />} />    */}
 
           <Route path="/preview-service" exact element={<Preview />} />
+
+          <Route path="/contact-query" element={<ListContactQuery/>}/>
 
           <Route
             path="/listing"

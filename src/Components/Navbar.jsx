@@ -81,13 +81,24 @@ function Navbar({ setLogin, setSignUp }) {
               >
                 Our Service
               </Button>
-              <Button
-                color="inherit"
-                sx={{ color: "#FFFFF" }}
-                onClick={() => navigate("/contact")}
-              >
-                Contact Us
-              </Button>
+
+              {data.role !== "Admin" ?
+                  <Button
+                  color="inherit"
+                  sx={{ color: "#FFFFF" }}
+                  onClick={() => navigate("/contact")}
+                >
+                  Contact 
+                </Button> :
+                 <Button
+                 color="inherit"
+                 sx={{ color: "#FFFFF" }}
+                 onClick={() => navigate("/contact-query")}
+               >
+                 Contact Query 
+               </Button>
+                 }
+             
             </Box>
 
             {isAuth ? (

@@ -34,6 +34,11 @@ export async function get_provider (location){
     return await axios.get(`${API_LIVE}/service/get-provide?location=${location}`)
 }
 
+export async function submit_contact_query (data){
+    return await axios.post(`${API_LIVE}/contact/submit/contact-query`,data)
+}
 
-
+export async function get_all_contact_query (){
+    return await axios.get(`${API_LIVE}/contact/get-all/contact-query`)
+}
 
