@@ -47,7 +47,7 @@ function Navbar({ setLogin, setSignUp }) {
                     color="inherit"
                     sx={{ color: "#FFFFF" }}
                     onClick={() =>
-                      navigate(data.role === "Admin" ? "/dashboard" : "/user-dashboard")
+                      navigate(data.role === "Admin" ? "/" : "/")
                     }
                   >
                     Home
