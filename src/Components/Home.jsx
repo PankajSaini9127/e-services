@@ -4,6 +4,7 @@ import { Box } from '@mui/system'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
+
 function Home() {
  
 
@@ -15,7 +16,6 @@ function Home() {
 
   return (
     <>
-     
      <Box sx={{height:"100vh",backgroundColor:'#c2c8d1'}}>
        <Grid container sx={{justifyContent:"center", alignItems:'center',height:'100%'}}>
         <Grid item md={10} container sx={{justifyContent:'center'}} spacing={4}>

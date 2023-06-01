@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Grid, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, Grid, Toolbar, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import { Stack } from "@mui/system";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -10,6 +10,8 @@ function Navbar({ setLogin, setSignUp }) {
     state: { isAuth, data },
     dispatch,
   } = useContext(GlobleContext);
+
+  console.log(data.name)
 
   function handleLogout() {
     dispatch(
@@ -102,9 +104,12 @@ function Navbar({ setLogin, setSignUp }) {
             </Box>
 
             {isAuth ? (
+              <>
+              <Typography variant="body1">Welcome {data.name}</Typography>
               <Button color="inherit" onClick={handleLogout}>
                 Logout
               </Button>
+              </>
             ) : (
               <>
                 <Button color="inherit" onClick={() => setLogin(true)}>

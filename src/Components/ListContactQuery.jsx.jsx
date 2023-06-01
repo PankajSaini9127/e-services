@@ -98,7 +98,7 @@ export default function ListContactQuery() {
         fontWeight="600"
         textAlign={"center"}
       >
-        Customber Query
+        Customer Query
       </Typography>
       {/* <Button
         sx={{ float: "right", mr: 6, my: 3 }}

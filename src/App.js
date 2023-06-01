@@ -18,6 +18,7 @@ import UserDashBoard from "./Components/UserPanel/UserDashBoard";
 import UserListing from "./Components/UserPanel/UserListing";
 import Preview from "./Components/Preview";
 import ListContactQuery from "./Components/ListContactQuery.jsx";
+import Footer from "./Components/Footer";
 
 const GlobleContext = createContext();
 
@@ -98,6 +99,7 @@ function App() {
 
           {/* "/user-dashboard" */}
         </Routes>
+        <Footer/>
       </BrowserRouter>
     </GlobleContext.Provider>
   );
