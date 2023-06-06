@@ -11,7 +11,7 @@ function Navbar({ setLogin, setSignUp }) {
     dispatch,
   } = useContext(GlobleContext);
 
-  console.log(data.name)
+  // console.log(data.name)
 
   function handleLogout() {
     dispatch(
@@ -21,10 +21,12 @@ function Navbar({ setLogin, setSignUp }) {
         message: "Logout Successfully.",
       })
     );
+    navigate('/')
     dispatch(setAuth())
   }
 
   const navigate = useNavigate();
+  
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -61,7 +63,7 @@ function Navbar({ setLogin, setSignUp }) {
                           navigate(data.role === "Admin" ? "/listing" : "/user-listing")
                       }
                     >
-                      Request
+                   {data.role === "Admin" ? "Agent" : "Request"}
                     </Button>
                  {data.role !== "Admin" &&
                   <Button

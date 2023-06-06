@@ -153,7 +153,7 @@ async function handleSubmit(e){
               />
 
               <Grid item xs={6}>
-                <Button variant="contained" sx={{ px: 4, mb: 2 }} type="submit">
+                <Button variant="contained" sx={{ px: 4, mb: 2 }} type="submit" fullWidth>
                   Submit Query
                 </Button>
               </Grid>
